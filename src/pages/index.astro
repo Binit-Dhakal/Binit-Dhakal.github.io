@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import avatarImg from '../assets/avatar.jpg';
 
 const papers = await getCollection('papers');
 const books = await getCollection('books');
@@ -17,11 +19,13 @@ const projectTags = [...new Set(projects.flatMap((p) => p.data.tags || []))];
 <Layout title="Systems & Architecture Notes">
   {/* --- BIO SECTION --- */}
   <header class="bio">
-    <img 
-      src="/binit-profile.jpg" 
-      alt="Profile Picture" 
-      class="avatar" 
-    />
+    <Image 
+    src={avatarImg} 
+    alt="Profile Picture" 
+    class="avatar" 
+    width={192} 
+    height={192} 
+  />
     <div class="bio-text">
       <h1>Software Engineer</h1>
       <p class="mono status">🟢 Focus: Distributed Systems & Backend Engineering</p>
