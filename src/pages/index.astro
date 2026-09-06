@@ -1,0 +1,276 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const papers = await getCollection('papers');
+const books = await getCollection('books');
+const blogs = await getCollection('blogs');
+const projects = await getCollection('projects');
+
+// Extract unique tags for each section
+const paperTags = [...new Set(papers.flatMap((p) => p.data.tags || []))];
+const bookTags = [...new Set(books.flatMap((b) => b.data.tags || []))];
+const blogTags = [...new Set(blogs.flatMap((b) => b.data.tags || []))];
+const projectTags = [...new Set(projects.flatMap((p) => p.data.tags || []))];
+---
+
+<Layout title="Systems & Architecture Notes">
+  {/* --- BIO SECTION --- */}
+  <header class="bio">
+    <img 
+      src="/binit-profile.jpg" 
+      alt="Profile Picture" 
+      class="avatar" 
+    />
+    <div class="bio-text">
+      <h1>Software Engineer</h1>
+      <p class="mono status">🟢 Focus: Distributed Systems & Backend Engineering</p>
+      <p class="bio-desc">
+        Building high-throughput backend services, low-level architecture, and writing whitepaper summaries.
+      </p>
+
+      {/* --- SOCIAL LINKS --- */}
+      <div class="socials mono">
+        <a href="https://github.com/Binit-Dhakal" target="_blank" rel="noopener noreferrer">
+          [GitHub]
+        </a>
+        <a href="https://linkedin.com/in/Binit-Dhakal" target="_blank" rel="noopener noreferrer">
+          [LinkedIn]
+        </a>
+        <a href="https://www.upwork.com/freelancers/~01050cf2ce2c553a55" target="_blank" rel="noopener noreferrer">
+          [Upwork]
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <hr class="divider" />
+
+  {/* --- NAVIGATION TABS --- */}
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="papers">Papers ({papers.length})</button>
+    <button class="tab-btn" data-tab="books">Books ({books.length})</button>
+    <button class="tab-btn" data-tab="blogs">Blogs ({blogs.length})</button>
+    <button class="tab-btn" data-tab="projects">Projects ({projects.length})</button>
+  </nav>
+
+  {/* --- CONTENT PANELS --- */}
+  <section class="tab-content">
+    {/* PAPERS PANEL */}
+    <div id="papers" class="panel active">
+      {paperTags.length > 0 && (
+        <div class="tag-bar mono" data-section="papers">
+          <button class="tag-filter active" data-tag="all">#all</button>
+          {paperTags.map((tag) => (
+            <button class="tag-filter" data-tag={tag}>#{tag}</button>
+          ))}
+        </div>
+      )}
+      <ul class="entry-list">
+        {papers.map((p) => (
+          <li class="entry-item" data-tags={JSON.stringify(p.data.tags || [])}>
+            <span class="date mono">{p.data.pubDate.toISOString().slice(0, 10)}</span>
+            <a href={`/papers/${p.id}`} class="title">{p.data.title}</a>
+            <p class="desc">{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* BOOKS PANEL */}
+    <div id="books" class="panel">
+      {bookTags.length > 0 && (
+        <div class="tag-bar mono" data-section="books">
+          <button class="tag-filter active" data-tag="all">#all</button>
+          {bookTags.map((tag) => (
+            <button class="tag-filter" data-tag={tag}>#{tag}</button>
+          ))}
+        </div>
+      )}
+      <ul class="entry-list">
+        {books.map((b) => (
+          <li class="entry-item" data-tags={JSON.stringify(b.data.tags || [])}>
+            <span class="date mono">{b.data.pubDate.toISOString().slice(0, 10)}</span>
+            <a href={`/books/${b.id}`} class="title">{b.data.title}</a>
+            <p class="desc">{b.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* BLOGS PANEL */}
+    <div id="blogs" class="panel">
+      {blogTags.length > 0 && (
+        <div class="tag-bar mono" data-section="blogs">
+          <button class="tag-filter active" data-tag="all">#all</button>
+          {blogTags.map((tag) => (
+            <button class="tag-filter" data-tag={tag}>#{tag}</button>
+          ))}
+        </div>
+      )}
+      <ul class="entry-list">
+        {blogs.map((b) => (
+          <li class="entry-item" data-tags={JSON.stringify(b.data.tags || [])}>
+            <span class="date mono">{b.data.pubDate.toISOString().slice(0, 10)}</span>
+            <a href={`/blogs/${b.id}`} class="title">{b.data.title}</a>
+            <p class="desc">{b.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {/* PROJECTS PANEL */}
+    <div id="projects" class="panel">
+      {projectTags.length > 0 && (
+        <div class="tag-bar mono" data-section="projects">
+          <button class="tag-filter active" data-tag="all">#all</button>
+          {projectTags.map((tag) => (
+            <button class="tag-filter" data-tag={tag}>#{tag}</button>
+          ))}
+        </div>
+      )}
+      <ul class="entry-list">
+        {projects.map((proj) => (
+          <li class="entry-item" data-tags={JSON.stringify(proj.data.tags || [])}>
+            <span class="date mono">{proj.data.pubDate.toISOString().slice(0, 10)}</span>
+            <a href={`/projects/${proj.id}`} class="title">{proj.data.title}</a>
+            <p class="desc">{proj.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+.bio {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+
+  .avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .bio-text h1 {
+    font-size: 1.6rem;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .status {
+    font-size: 0.85rem;
+    color: var(--accent-green);
+    margin: 0.25rem 0 0.5rem 0;
+  }
+
+  .bio-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Social links styling */
+  .socials {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .socials a {
+    color: var(--accent);
+    transition: color 0.15s ease;
+  }
+
+  .socials a:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .divider {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  /* Responsive tweak for mobile screens */
+  @media (max-width: 600px) {
+    .bio {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .socials {
+      justify-content: center;
+    }
+  }
+  /* Tabs */
+  .tab-nav { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
+  .tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 0.5rem 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+  /* Tag Filtering Bar */
+  .tag-bar { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .tag-filter { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; cursor: pointer; }
+  .tag-filter:hover { border-color: var(--accent); color: var(--text); }
+  .tag-filter.active { background: rgba(88, 166, 255, 0.15); border-color: var(--accent); color: var(--accent); }
+
+  /* Panels & Lists */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .entry-list { list-style: none; }
+  .entry-item { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px dashed var(--border); }
+  .date { display: block; font-size: 0.8rem; color: var(--text-muted); }
+  .title { font-size: 1.1rem; font-weight: 600; }
+  .desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.2rem; }
+</style>
+
+<script>
+  // Tab Switching Logic
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-tab');
+      tabButtons.forEach((b) => b.classList.remove('active'));
+      panels.forEach((p) => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById(targetTab!)?.classList.add('active');
+    });
+  });
+
+  // Dynamic Tag Filtering Logic
+  document.querySelectorAll('.tag-filter').forEach((button) => {
+    button.addEventListener('click', () => {
+      const parentPanel = button.closest('.panel');
+      if (!parentPanel) return;
+
+      const selectedTag = button.getAttribute('data-tag');
+
+      // Update active tag button state inside current panel
+      parentPanel.querySelectorAll('.tag-filter').forEach((b) => b.classList.remove('active'));
+      button.classList.add('active');
+
+      // Filter list entries
+      const entries = parentPanel.querySelectorAll<HTMLElement>('.entry-item');
+      entries.forEach((entry) => {
+        const itemTags: string[] = JSON.parse(entry.getAttribute('data-tags') || '[]');
+        if (selectedTag === 'all' || itemTags.includes(selectedTag!)) {
+          entry.style.display = 'block';
+        } else {
+          entry.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

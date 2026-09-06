@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import PostLayout from "../../layouts/PostLayout.astro";
+
+export async function getStaticPaths() {
+  const papers = await getCollection("papers");
+  return papers.map((paper) => ({
+    params: { slug: paper.id },
+    props: { paper },
+  }));
+}
+
+type Props = {
+  paper: CollectionEntry<"papers">;
+};
+
+const { paper } = Astro.props;
+const { Content } = await render(paper);
+---
+
+<PostLayout
+  title={paper.data.title}
+  description={paper.data.description}
+  pubDate={paper.data.pubDate}
+  tags={paper.data.tags}
+  type="Paper Note"
+>
+  <Content />
+</PostLayout>
