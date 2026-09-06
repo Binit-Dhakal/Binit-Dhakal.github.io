@@ -3,7 +3,7 @@ interface Props {
   title?: string;
 }
 
-const { title = "Engineers Notebook" } = Astro.props;
+const { title = "Binit Dhakal | Backend Engineer" } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,12 +34,17 @@ const { title = "Engineers Notebook" } = Astro.props;
         background-color: var(--bg);
         color: var(--text);
         font-family: system-ui, -apple-system, sans-serif;
-        line-height: 1.6;
-        padding: 2rem 1rem;
+        font-size: 17px; /* Increased from default 16px */
+        line-height: 1.65;
+        padding: 3rem 1.5rem; /* Generous vertical padding */
       }
+	  html {
+    /* Resets base font size to 100% (default 16px) without artificial zoom */
+    font-size: 100%;
+  }
 
       .container {
-        max-width: 760px;
+        max-width: 1200px; /* Widened from 760px */
         margin: 0 auto;
       }
 
